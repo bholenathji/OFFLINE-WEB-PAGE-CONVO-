@@ -43,7 +43,7 @@ def index():
             }
 
             .btn:hover {
-                background-color: #45a049;
+                background-color: #7c7f7c;
                 box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
                 transform: translateY(-2px);
             }
@@ -54,11 +54,11 @@ def index():
             }
 
             .back-btn {
-                background-color: #2196F3;
+                background-color: #f3e721;
             }
 
             .back-btn:hover {
-                background-color: #1e88e5;
+                background-color: #f37e21;
             }
         </style>
     </head>
