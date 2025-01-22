@@ -32,7 +32,7 @@ def index():
                 margin: 20px auto;
                 text-decoration: none;
                 color: white;
-                background-color: #4CAF50;
+                background-color: #abaf4c;
                 border: none;
                 border-radius: 10px;
                 font-size: 18px;
