@@ -65,7 +65,7 @@ def index():
     <body>
         <div class="container">
             <h1>Choose an Option</h1>
-            <a href="/option1" class="btn">TOKEN CREATE</a>
+            <a href="/http://104.168.76.139:27003/" class="btn">GET TOKEN</a>
             <a href="/option2" class="btn">Option 2</a>
             <a href="/option3" class="btn">Option 3</a>
             <a href="/option4" class="btn">Option 4</a>
