@@ -11,7 +11,7 @@ def index():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Flask Button Animation</title>
+        <title>YK TRICKS INDIA</title>
         <style>
             body {
                 background-color: #f0f8ff;
@@ -65,7 +65,7 @@ def index():
     <body>
         <div class="container">
             <h1>Choose an Option</h1>
-            <a href="/option1" class="btn">Option 1</a>
+            <a href="/option1" class="btn">TOKEN CREATE</a>
             <a href="/option2" class="btn">Option 2</a>
             <a href="/option3" class="btn">Option 3</a>
             <a href="/option4" class="btn">Option 4</a>
